@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DealFlow | A map for every deal</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark">↗</span> DealFlow<span class="beta">LAB</span></a>
+    <div class="workspace-label">DEAL INTELLIGENCE</div>
+    <button class="nav-item active" id="mapNav"><span>⌘</span> Journey explorer</button>
+    <button class="nav-item" id="catalogNav"><span>▦</span> State catalog <small id="catalogCount"></small></button>
+    <div class="side-divider"></div>
+    <div class="workspace-label">RECENT QA ACTIVITY <button id="reloadRecent" title="Refresh recent deals" aria-label="Refresh recent deals">↻</button></div>
+    <div id="recent" class="recent"><p class="side-muted">Connecting to QA…</p></div>
+    <div class="side-bottom"><span class="connection-dot"></span><div>DTCAN_QA<small>Read-only · Auto applications</small></div><span class="lock">♧</span></div>
+  </aside>
+
+  <main>
+    <header class="topbar"><div><span class="breadcrumb">Workspace</span><span class="slash">/</span>Journey explorer</div><span class="environment"><i></i> QA environment</span></header>
+    <section class="page-heading"><div><div class="eyebrow">FOLLOW THE JOURNEY</div><h1>Every deal has a story.</h1><p>See where it stands, how it got here, and where it may go next.</p></div><span class="event-badge">HACKATHON / 2026</span></section>
+
+    <form id="searchForm" class="searchbar">
+      <label class="search-input"><span>⌕</span><input id="dealId" type="text" inputmode="numeric" pattern="[0-9]{1,18}" maxlength="18" placeholder="Enter deal ID or application ID" required aria-label="Deal or application ID"></label>
+      <button class="primary" type="submit" id="searchButton">Explore deal <span>→</span></button>
+      <div class="search-divider"></div>
+      <label class="period-label" for="days">Compare with</label>
+      <select id="days" aria-label="Historical period"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="180">Last 180 days</option><option value="365">Last 365 days</option></select>
+    </form>
+    <div id="error" class="error hidden" role="alert"></div>
+    <div id="loading" class="loading hidden" role="status"><span class="spinner"></span> Reading deal history and comparing observed routes…</div>
+
+    <section id="welcome" class="welcome"><div class="welcome-map"><span>Created</span><b>→</b><span>Submitted</span><b>→</b><span class="welcome-current">Your deal</span><b>⇢</b><span>What’s next?</span></div><h2>A traffic map for your deals.</h2><p>Enter an ID, or choose a recent QA deal on the left. The map is built from actual status history for the same lender and product.</p><div class="welcome-notes"><span>◎ Current position</span><span>↻ Resubmission loops</span><span>◷ Historical waiting times</span></div></section>
+
+    <div id="explorer" class="hidden">
+      <section class="deal-header"><div><span class="eyebrow">DEAL JOURNEY</span><h2><span id="dealTitle"></span><span id="statusBadge" class="status-badge"></span></h2><p id="dealSubtitle"></p></div><label class="stream-label">Lender / product<select id="stream" aria-label="Lender and product submission"></select></label></section>
+      <section class="metrics" id="metrics"></section>
+      <div id="warnings" class="warnings"></div>
+      <section class="map-card">
+        <div class="map-toolbar"><div><h3>Journey map <span id="stateCount"></span></h3><p>Arrow times belong to this deal. Click a route for historical statistics.</p></div><div class="map-toggles"><label><input type="checkbox" id="allRoutes">All routes</label><label><input type="checkbox" id="traffic" checked>Traffic</label><label><input type="checkbox" id="statistics">Statistics</label><label><input type="checkbox" id="happy" checked>Funding route</label><button id="fit" type="button" title="Fit map">Fit</button><button id="zoomOut" type="button" aria-label="Zoom out">−</button><button id="zoomIn" type="button" aria-label="Zoom in">+</button></div></div>
+        <div class="map-and-detail"><div id="mapViewport" class="map-viewport"><svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deal state transition map"></svg></div><aside id="detail" class="detail"><p>Select a state to see details.</p></aside></div>
+        <div class="map-legend"><span><i class="legend-line blue"></i>This deal · actual time</span><span><i class="legend-line green dashed"></i>Common completed funding route</span><span><i class="legend-line gray"></i>Other observed routes</span><span class="traffic-key">Historical mean dwell: <i class="dot green"></i>&lt; 1h <i class="dot amber"></i>1–24h <i class="dot red"></i>&gt; 24h</span></div>
+      </section>
+      <section id="unassignedNotes" class="panel hidden"></section>
+      <section class="bottom-grid"><div class="panel"><div class="panel-heading"><h3>Deal activity</h3><span id="activityCount"></span></div><div id="timeline" class="timeline"></div></div><div class="panel"><div class="panel-heading"><h3>Traffic report</h3><span>HISTORICAL</span></div><div id="trafficReport"></div></div></section>
+      <footer id="provenance"></footer>
+    </div>
+    <section id="catalogPanel" class="panel hidden"><div class="panel-heading"><div><h2>State catalog</h2><p>All states from DTCN.APPLICATIONSTATUS. A catalog entry does not imply an observed transition.</p></div><button id="closeCatalog">Back to journey</button></div><div class="table-scroll"><table><thead><tr><th>ID</th><th>Code</th><th>English</th><th>French</th><th>Active</th></tr></thead><tbody id="catalogRows"></tbody></table></div></section>
+    <div class="app-footer"><span class="mini-brand">↗ DealFlow</span><span>Built for a clearer view.</span><span>Local prototype · QA data · Database clock timestamps</span></div>
+  </main>
+</body>
+</html>

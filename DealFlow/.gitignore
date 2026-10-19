@@ -1,0 +1,5 @@
+bin/
+obj/
+*.local.*
+*.log
+tools/inspect.sql
